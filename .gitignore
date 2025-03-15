@@ -1,0 +1,5 @@
+# Ignorar entornos virtuales
+.venv/
+
+# Ignorar archivos de configuración del editor
+.idea/
