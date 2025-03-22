@@ -3,3 +3,5 @@
 
 # Ignorar archivos de configuración del editor
 .idea/
+
+.DS_Store
