@@ -9,7 +9,7 @@
 
 # #### Importar librerias
 
-# In[229]:
+# In[194]:
 
 
 import os
@@ -29,7 +29,7 @@ import numpy as np
 # En este caso, importamos el modelo pre-entrenado en inglés, lo que requiere que todas las CVs a procesar estén en este idioma.
 # 
 
-# In[230]:
+# In[195]:
 
 
 nlp = spacy.load("en_core_web_sm")
@@ -37,7 +37,7 @@ nlp = spacy.load("en_core_web_sm")
 
 # #### Cargar las carpetas con las HVs
 
-# In[231]:
+# In[196]:
 
 
 hv_dir_exitosas_java = "hojas_de_vida/java/Paso"
@@ -50,18 +50,18 @@ hv_dir_noexitosas_front = "hojas_de_vida/frontend/No Paso"
 # En este caso, se definirar palabras clave que podrán tener las HVs teniendo en cuenta que para este modelo en particular se está utlizando solo HVs para un requerimiento de **desarrolladores Java**.
 # 
 
-# In[232]:
+# In[197]:
 
 
 palabras_clave_java = ["Java", "Spring", "spring boot", "AWS", "Azure", "GCP", "Google Cloud Platform", "microservices", "Maven", "Gradle", "Java Server Pages", "JSP", "JEE", "Java Enterprise Edition", "Java8", "Java11", "Java17", "Java21", "JVM", "Java virtual machine"]
 
-palabras_clave_front_end = ["Javascript", "Typescript", "React", "Angular", "Vue", "react.js", "vue.js", "HTML", "CSS", "Redux", "Hooks", "Micro frontends"]
+palabras_clave_front_end = ["Javascript", "Typescript", "React", "Angular", "Vue", "react.js", "vue.js", "HTML", "CSS", "Redux", "Hooks", "Micro frontends", "JS", "Node", "Node.js"]
 
 
 # ### Definir las secciones y los patrones en las que estas van a aparecer
 # Además de definir la cantidad de palabras clave, es importante contar con las secciones con las que cada documento puede contar y entender si cuenta o no con este.
 
-# In[233]:
+# In[198]:
 
 
 secciones = {
@@ -75,14 +75,14 @@ secciones = {
     "projects": r"projects|case studies|portfolio",
     "publications": r"publications|research papers|articles|books",
     "training_courses": r"training|courses|workshops|online learning",
-    "volunteer_work": r"volunteer|volunteering|social impact|community service",
+    "volunteer_work": r"\bvolunteer(?:ing)?(?:\s+work)?\b|community\s+service|social\s+impact|non-profit",
 }
 
 
 # ### Detectar el tipo de HV para posterior procesamiento de palabras clave
 # 
 
-# In[234]:
+# In[199]:
 
 
 def detect_cv_type(cv_path):
@@ -100,7 +100,7 @@ def detect_cv_type(cv_path):
 # 
 # La declaramos como función para llamarla más adelante en el procesamiento de todas las características que buscamos extraer.
 
-# In[235]:
+# In[200]:
 
 
 def extract_text_from_pdf(pdf_path):
@@ -138,7 +138,7 @@ def extract_text_from_pdf(pdf_path):
 
 # ### Contar palabras en general
 
-# In[236]:
+# In[201]:
 
 
 def contar_palabras(text):
@@ -147,7 +147,7 @@ def contar_palabras(text):
 
 # #### Contar palabras clave
 
-# In[237]:
+# In[202]:
 
 
 def contar_palabras_clave(text, cv_type):
@@ -176,37 +176,35 @@ def contar_palabras_clave(text, cv_type):
 
 # Para extraer las secciones, usamos expresiones regulares. Con la biblioteca Re, busca el patron definido en la variable secciones más arriba, que ayuda a identificar si el texto obtenido del PDF tiene o no esta sección.
 
-# In[238]:
+# In[203]:
 
 
 def extraer_secciones(text):
     """
     Extracts sections from the CV text using regex patterns.
-    - Matches variations of section headers (Education, Work Experience, etc.).
-    - Ignores dashes, colons, and extra spaces for better detection.
-    - Counts words correctly by detecting next section OR using end of text.
+    - Finds section headers first, then captures text until the next section starts.
+    - Uses default text end as fallback if no next section is found.
     """
     sections = {key: {"exists": False, "word_count": 0} for key in secciones.keys()}
 
+    # ✅ Improved regex pattern: handles variations, dashes, colons, spacing
+    section_positions = {}
+
     for section, pattern in secciones.items():
-        # ✅ Improved regex pattern: handles variations, dashes, colons, spacing
-        section_regex = rf"\b{pattern}\s*[:\-]?\s*\b"
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            sections[section]["exists"] = True  # ✅ Mark section as existing
+            section_positions[section] = match.start()  # ✅ Store section start position
 
-        matches = list(re.finditer(section_regex, text, re.IGNORECASE))
-        if matches:
-            sections[section]["exists"] = True
-            start_pos = matches[0].start()
+    sorted_sections = sorted(section_positions.items(), key=lambda x: x[1])  # ✅ Sort by text position
 
-            # Find the next section (or use the end of text)
-            next_starts = [
-                m.start() for s, p in secciones.items()
-                if (m := re.search(p, text[start_pos + 1:], re.IGNORECASE))
-            ]
-            end_pos = min(next_starts, default=len(text))  # ✅ Use end of text as fallback
+    for i, (section, start_pos) in enumerate(sorted_sections):
+        # ✅ Find the next section start OR use end of text
+        end_pos = sorted_sections[i + 1][1] if i + 1 < len(sorted_sections) else len(text)
+        section_text = text[start_pos:end_pos].strip()
 
-            # ✅ Ensure section extraction doesn't fail
-            section_text = text[start_pos:end_pos].strip()
-            sections[section]["word_count"] = contar_palabras(section_text) if section_text else 0
+        # ✅ Ensure section extraction doesn't fail
+        sections[section]["word_count"] = contar_palabras(section_text) if section_text else 0
 
     return sections
 
@@ -216,7 +214,7 @@ def extraer_secciones(text):
 
 # #### Verificar si tiene o no foto
 
-# In[239]:
+# In[204]:
 
 
 def tiene_foto_pdf(pdf_path):
@@ -232,7 +230,7 @@ def tiene_foto_pdf(pdf_path):
 
 # #### Verificar si tiene colores adicionales el PDF
 
-# In[240]:
+# In[205]:
 
 
 def tiene_color_pdf(pdf_path):
@@ -277,7 +275,7 @@ def tiene_color_pdf(pdf_path):
 
 # #### Contar páginas
 
-# In[241]:
+# In[206]:
 
 
 def contar_paginas(pdf_path):
@@ -292,7 +290,7 @@ def contar_paginas(pdf_path):
 # ### Procesamiento del CV
 # A continuación la función de procesamiento, nos ayudará a procesar un solo CV de acuerdo a los parámetros establecidos anteriormente, ejecutando cada una de las funciones ya establecidas
 
-# In[248]:
+# In[207]:
 
 
 def process_cv(cv_path):
@@ -339,7 +337,7 @@ def process_cv(cv_path):
 # ### Procesamiento de CVs en la carpeta
 # La siguiente función nos ayuda a de acuerdo con lo establecido anteriormente, procesar todas las CVs en las carpetas seleccionadas y devolverlas en una lista
 
-# In[249]:
+# In[208]:
 
 
 def process_folder(folder_path, label):
@@ -358,7 +356,7 @@ def process_folder(folder_path, label):
 
 # Se crean las variables donde se almacenan las CVs exitosas procesadas, agregando la información de 1 si es exitosa y 0 si no es exitosa.
 
-# In[250]:
+# In[209]:
 
 
 # 📌 Process All CVs & Create Dataset
@@ -370,7 +368,7 @@ data_total = (process_folder(hv_dir_exitosas_java, 1) +
 
 # Se guarda esta información en un dataframe
 
-# In[245]:
+# In[210]:
 
 
 baseCVs = pd.DataFrame(data_total)
@@ -382,7 +380,7 @@ baseCVs = baseCVs.drop('CV_Name', axis=1)
 baseCVs = baseCVs.sample(frac=1, random_state=42).reset_index(drop=True)
 
 
-# In[246]:
+# In[211]:
 
 
 baseCVs
@@ -390,7 +388,150 @@ baseCVs
 
 # ### Exportar base en un archivo CSV para posterior lectura
 
-# In[247]:
+# In[212]:
+
+
+#baseCVs.to_csv("baseCVs.csv", index=False)
+
+
+# ## Limpieza de la base
+# Buscaremos imputar outliers y tener la base más óptima posible para el modelo predictivo
+
+# Primero, un descriptivo de la base
+
+# In[213]:
+
+
+baseCVs.describe()
+
+
+# ### Revisamos correlaciones con la variable 'Passed'
+
+# In[214]:
+
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 8))
+sns.heatmap(baseCVs.corr(), annot=True, cmap="coolwarm")
+plt.show()
+
+
+# In[215]:
+
+
+# Get correlation with "Passed" column
+correlation_with_target = baseCVs.corr()["Passed"].drop("Passed")  # Remove self-correlation
+
+# Sort features by absolute correlation value (strongest correlations first)
+important_features = correlation_with_target.abs().sort_values(ascending=False)
+
+# Display top 10 most important features
+print("🔹 Top 15 Most Correlated Features with 'Passed':")
+print(important_features.head(15))
+
+
+# ### Revisamos con random forest las que más contribuyen
+
+# In[216]:
+
+
+from sklearn.ensemble import RandomForestClassifier
+
+X = baseCVs.drop("Passed", axis=1)
+y = baseCVs["Passed"]
+
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X, y)
+
+feature_importances = pd.Series(rf.feature_importances_, index=X.columns)
+print(feature_importances.sort_values(ascending=False))
+
+
+# In[217]:
+
+
+top_features = feature_importances.nlargest(10).index
+print((top_features))
+
+
+# ### Revisamos el balanceo de la base
+
+# In[218]:
+
+
+print(baseCVs["Passed"].value_counts(normalize=True))  # Show % of each class
+
+
+# ### Identificamos outliers
+
+# In[219]:
+
+
+#Creamos una variable que nos permite separar las variables word_count, las que pueden presentar mayor cantidad de outliers
+word_count_cols = [col for col in baseCVs.columns if "Word_Count" in col]  # Get all word count columns
+
+plt.figure(figsize=(12, 6))
+sns.boxplot(data=baseCVs[word_count_cols])
+plt.xticks(rotation=45)
+plt.title("Boxplot of Word Count Columns (Detecting Outliers)")
+plt.show()
+
+
+# In[220]:
+
+
+# Function to detect outliers using IQR method
+def detect_outliers_iqr(df, column):
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+    IQR = Q3 - Q1
+
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+
+    outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)][column]
+    return outliers
+
+# Print outliers for each word count column
+for col in word_count_cols:
+    outliers = detect_outliers_iqr(baseCVs, col)
+    print(f"📌 {col} has {len(outliers)} outliers.")
+
+
+# ### Imputamos outliers con la técnica winsorization
+# Limitamos los outliers al 5%
+
+# In[221]:
+
+
+from scipy.stats.mstats import winsorize
+
+# Exclude "volunteer_work_Word_Count" from winsorization
+columns_to_winsorize = [col for col in word_count_cols if col != "volunteer_work_Word_Count"]
+
+for col in columns_to_winsorize:
+    baseCVs[col] = winsorize(baseCVs[col], limits=[0, 0.10])  # 10% upper limit
+
+
+# In[222]:
+
+
+plt.figure(figsize=(12, 6))
+sns.boxplot(data=baseCVs[word_count_cols])
+plt.xticks(rotation=45)
+plt.title("Boxplot After Winsorization (Upper Outliers Capped)")
+plt.show()
+
+
+# In[223]:
+
+
+baseCVs
+
+
+# In[224]:
 
 
 baseCVs.to_csv("baseCVs.csv", index=False)
