@@ -60,7 +60,7 @@ instalarlas es usando `pip` dentro de un entorno virtual.
 3.  **(Recomendado) Crear y Activar un Entorno Virtual:**
     * Crea el entorno (solo una vez):
         ```bash
-        python -m venv mi_entorno_cv
+        python3 -m venv mi_entorno_cv
         ```
     * Activa el entorno:
         * Windows:
@@ -77,7 +77,7 @@ instalarlas es usando `pip` dentro de un entorno virtual.
     Copia el archivo `requirements.txt` (que debe estar en la misma carpeta que este README)
     y ejecuta:
     ```bash
-	python -m pip install --upgrade pip
+	python3 -m pip install --upgrade pip
     
 	pip install -r requirements.txt
     ```
@@ -94,8 +94,8 @@ puedes ejecutar el script desde la terminal.
 **Comando Básico:**
 
 ```bash
-python Herramienta.py CV/[AQUI MODIFICA EL NOMBRE POR EL DEL ARCHIVO DE CV A ANALIZAR].pdf --scaler kmeans_scaler_k3_4f.joblib --kmeans kmeans_model_k3_4f.joblib
+python3 Herramienta.py CV/[AQUI MODIFICA EL NOMBRE POR EL DEL ARCHIVO DE CV A ANALIZAR].pdf --scaler kmeans_scaler_k3_4f.joblib --kmeans kmeans_model_k3_4f.joblib
 
-python Herramienta.py CV/sample.pdf --scaler kmeans_scaler_k3_4f.joblib --kmeans kmeans_model_k3_4f.joblib
+python3 Herramienta.py CV/sample2.pdf --scaler kmeans_scaler_k3_4f.joblib --kmeans kmeans_model_k3_4f.joblib
 
 Copia y pega esto en la terminal. 
