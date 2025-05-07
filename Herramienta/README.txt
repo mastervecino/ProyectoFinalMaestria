@@ -77,7 +77,9 @@ instalarlas es usando `pip` dentro de un entorno virtual.
     Copia el archivo `requirements.txt` (que debe estar en la misma carpeta que este README)
     y ejecuta:
     ```bash
-    pip install -r requirements.txt
+	python -m pip install --upgrade pip
+    
+	pip install -r requirements.txt
     ```
     Esto instalará: PyMuPDF, rapidfuzz, numpy, pandas, joblib, scikit-learn, y
     sus dependencias.
@@ -93,5 +95,7 @@ puedes ejecutar el script desde la terminal.
 
 ```bash
 python Herramienta.py CV/[AQUI MODIFICA EL NOMBRE POR EL DEL ARCHIVO DE CV A ANALIZAR].pdf --scaler kmeans_scaler_k3_4f.joblib --kmeans kmeans_model_k3_4f.joblib
+
+python Herramienta.py CV/sample.pdf --scaler kmeans_scaler_k3_4f.joblib --kmeans kmeans_model_k3_4f.joblib
 
 Copia y pega esto en la terminal. 
