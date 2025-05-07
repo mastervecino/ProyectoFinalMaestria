@@ -538,7 +538,7 @@ if 'Passed' in df.columns:
     sns.countplot(x='Passed', data=df)
     plt.title('Distribución de la Variable Objetivo "Passed"')
     plt.xlabel('Passed (0 = No Pasó, 1 = Pasó)')
-    plt.ylabel('Cantidad de CVs')
+    plt.ylabel('Cantidad de CV')
     plt.show()
 
         # Revisar si hay desbalanceo significativo
@@ -596,11 +596,11 @@ plt.show()
 
 # ## Análisis incial
 # 
-# Lo primero que debemos tener en cuenta, es que en términos de media, existen más CVs dentro de las que pasaron con un mayor número en las variables Numero de Paginas, Cantidad de Palabras, Cantidad de imágenes, Lineas_work_experience, Lineas_skills, Lineas_professional_profile, texto_extraido_len, secciones_completas. Esto, nos da a entender que es muy posible que las HVs más largas, hayan tenido una mayor probabilidad de éxito.
+# Lo primero que debemos tener en cuenta, es que en términos de media, existen más CV dentro de las que pasaron con un mayor número en las variables Numero de Paginas, Cantidad de Palabras, Cantidad de imágenes, Lineas_work_experience, Lineas_skills, Lineas_professional_profile, texto_extraido_len, secciones_completas. Esto, nos da a entender que es muy posible que las HVs más largas, hayan tenido una mayor probabilidad de éxito.
 # 
 # Aunque, para descartar el simple hecho de que es porque tienen más experiencia, es necesario crear una proporción de experiencia laboral vs total del texto. Esto se hará a continuación.
 # 
-# De la misma manera, podemos ver que las variables Tamaño cuerpo (fuente) probable, Uso de negritas (estimado %) cuentan con menor tamaño en las CVs que pasaron, lo que nos da una idea de que se buscan CVs con tamaños de fuente algo más "conservadores" y menos negritas en las CVs.
+# De la misma manera, podemos ver que las variables Tamaño cuerpo (fuente) probable, Uso de negritas (estimado %) cuentan con menor tamaño en las CV que pasaron, lo que nos da una idea de que se buscan CV con tamaños de fuente algo más "conservadores" y menos negritas en las CV.
 # 
 # Las variables Densidad Informacion (%) y Porcentaje Lenguaje Técnico, contrario a lo que se pensaría, son casi idénticas en ambos grupos, por lo que no deberían representar algo significativo en la cv. aunque lo podemos ver más adelante.
 # 
@@ -608,7 +608,7 @@ plt.show()
 # ### Prueba-t
 # La prueba t compara medias y nos muestra si hay una significancia estadística o no entre las diferencias observadas.
 # 
-# De acuerdo con esta prueba texto_extraido_len y secciones_completas son las variables que más significancia estadística cuentan entre los grupos passed y no-passed. De acuerdo con esto, es posible decir que las CVs con mayor longitud en su texto así como con mayor cantidad de secciones completas, son las que más probabilidad tienen de pasar.
+# De acuerdo con esta prueba texto_extraido_len y secciones_completas son las variables que más significancia estadística cuentan entre los grupos passed y no-passed. De acuerdo con esto, es posible decir que las CV con mayor longitud en su texto así como con mayor cantidad de secciones completas, son las que más probabilidad tienen de pasar.
 # 
 # Así mismo, hay otras que tienen una significancia algo más leve, como lo son Número de Páginas y Uso de negritas (estimado %), en donde con un mayor número de páginas existe una leve probabilidad de pasar, mientras que con un menor número de negritas, también hay una leve probabilidad de encontrarse en el grupo que pasó.
 # 
@@ -655,7 +655,7 @@ else:
 # 
 # Siendo así, las variables Website/Otro, Seccion_training_courses, son las que presentan una mayor significancia estadística frente a su asociación con la variable 'Passed', lo cual nos refiere que personas que tienen un website personal, portafolio o incluso un link a los productos que construyeron, tienen una mayor probabilidad de pertenecer al grupo de Passed. Por otro lado, es posible que las personas que muestran educación adicional a al tradicional, teniendo cursos, certificaciones, diplomados, etc, tiene mayor probabilidad de pasar.
 # 
-# Así mismo, variables que muestran relación aunque algo más leve son Seccion_languages, Seccion_publications, Formato Fecha Más Común_MM/YYYY, Fuente principal_Tahoma, Uso de colores (texto)_No/Si, lo que nos dice que personas que muestran explícitamente que hablan otro idioma o que realizaron la publicación de algún trabajo académico, aplicación o programa (recordemos que todos son Desarrolladores de software) tienen ligeramente más posibilidad de pertenecer al grupo que pasó. Así mismo, las personas que mostraron las fechas en las que trabajaron usando el formato MM/YYYY, ligeramente pueden estar pasando más frente a personas que no. Esto teniendo en cuenta la variedad de fechas, muestra que es importante mostrar no solo el año como en una gran cantidad de CVs, sino también el mes, en el formato de número el cual puede ser más fácil de entender para muchas personas y más sencillo entender la duración de las personas en sus respectivas experiencias. Por otro lado, la fuente principal tahoma, aunque diciente, posiblemente también es porque es una fuente sin serifas y de fácil lectura. Por otro lado, el uso de colores levemente nos puede ubicar en la variable passed.
+# Así mismo, variables que muestran relación aunque algo más leve son Seccion_languages, Seccion_publications, Formato Fecha Más Común_MM/YYYY, Fuente principal_Tahoma, Uso de colores (texto)_No/Si, lo que nos dice que personas que muestran explícitamente que hablan otro idioma o que realizaron la publicación de algún trabajo académico, aplicación o programa (recordemos que todos son Desarrolladores de software) tienen ligeramente más posibilidad de pertenecer al grupo que pasó. Así mismo, las personas que mostraron las fechas en las que trabajaron usando el formato MM/YYYY, ligeramente pueden estar pasando más frente a personas que no. Esto teniendo en cuenta la variedad de fechas, muestra que es importante mostrar no solo el año como en una gran cantidad de CV, sino también el mes, en el formato de número el cual puede ser más fácil de entender para muchas personas y más sencillo entender la duración de las personas en sus respectivas experiencias. Por otro lado, la fuente principal tahoma, aunque diciente, posiblemente también es porque es una fuente sin serifas y de fácil lectura. Por otro lado, el uso de colores levemente nos puede ubicar en la variable passed.
 
 # ## Nuevas variables
 # Crearemos el ratio de work-experience/longitud total, para entender si la cantidad de experiencia laboral total influye en algo. Así mismo, una que nos compare el número de secciones frente al texto total, con el objetivo de entender que tan densa es cada sección y si esta completitud afecta en la cantidad del texto también.
@@ -776,7 +776,7 @@ else:
             print(f"  - {var}: No se pudo realizar el T-test (datos insuficientes en algún grupo después de quitar NaNs).")
 
 
-# La prueba t con estas nuevas variables nos da a entender que la longitud de las CVs vs la longitud de la experiencia laboral no es significativa frente a si pasa o no, por el contrario, la longitud promedio de cada sección si es levemente significativa, lo cual nos dice que la cantidad de experiencia misma de los candidatos en si mismo no es lo que hacía que la longitud fuera un factor importante en que las CVs estuvieran en un grupo de si pasó o no pasó. Pero, si es importante que cada sección en la CV si tenga contenido algo más largo.
+# La prueba t con estas nuevas variables nos da a entender que la longitud de las CV vs la longitud de la experiencia laboral no es significativa frente a si pasa o no, por el contrario, la longitud promedio de cada sección si es levemente significativa, lo cual nos dice que la cantidad de experiencia misma de los candidatos en si mismo no es lo que hacía que la longitud fuera un factor importante en que las CV estuvieran en un grupo de si pasó o no pasó. Pero, si es importante que cada sección en la CV si tenga contenido algo más largo.
 
 # ### Identificación de variables con Feature Importance
 # 

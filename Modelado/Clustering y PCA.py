@@ -16,7 +16,7 @@ from scipy.stats import chi2_contingency # Para prueba Chi-cuadrado
 
 
 # # Clusterización usando K-Means
-# De acuerdo a la conclusión anterior, realizaremos un análisis con el módelo k-means, el cual nos traerá por medio de aprendizaje no-supervisado grupos de CVs con varios factores en común, desde los cuales podremos obtener una conclusión inicial para el objetivo de nuestro proyecto.
+# De acuerdo a la conclusión anterior, realizaremos un análisis con el módelo k-means, el cual nos traerá por medio de aprendizaje no-supervisado grupos de CV con varios factores en común, desde los cuales podremos obtener una conclusión inicial para el objetivo de nuestro proyecto.
 
 # In[35]:
 
@@ -120,7 +120,7 @@ if df_cluster_orig is not None:
     print("\n--- Análisis Descriptivo de los Clusters ---")
 
     # Tamaño de cada cluster
-    print("\nDistribución de CVs por cluster:")
+    print("\nDistribución de CV por cluster:")
     print(df_clustered['Cluster'].value_counts().sort_index())
 
     # Características promedio por cluster (usando las features seleccionadas antes del escalado)
@@ -300,7 +300,7 @@ if df_cluster_orig is not None:
     print("\n--- Análisis Descriptivo de los Clusters ---")
 
     # Tamaño de cada cluster
-    print("\nDistribución de CVs por cluster:")
+    print("\nDistribución de CV por cluster:")
     print(df_clustered['Cluster'].value_counts().sort_index())
 
     # Características promedio por cluster (usando las features seleccionadas antes del escalado)
@@ -503,7 +503,7 @@ if df_cluster_orig is not None:
     print("\n--- Análisis Descriptivo de los Clusters ---")
 
     # Tamaño de cada cluster
-    print("\nDistribución de CVs por cluster:")
+    print("\nDistribución de CV por cluster:")
     print(df_clustered['Cluster'].value_counts().sort_index())
 
     # Características promedio por cluster (usando las features seleccionadas antes del escalado)
@@ -601,9 +601,9 @@ else:
 
 # Aquí ya obtenemos una conclusión mucho más acertada sobre los clusters.
 # #### Clusters
-# 1. Cluster 0: CVs muy largos (7.5 pág, 11478 chars) con pocas secciones completas (8.9). % Técnico bajo (5.4%). Uso de negritas promedio (19%). Sección Training Courses presente (98%). Uso de color (79%). Densidad baja.
+# 1. Cluster 0: CV muy largos (7.5 pág, 11478 chars) con pocas secciones completas (8.9). % Técnico bajo (5.4%). Uso de negritas promedio (19%). Sección Training Courses presente (98%). Uso de color (79%). Densidad baja.
 # Perfil Sugerido: "Largos y poco estructurados (orientados a training)".
-# 2. Cluster 1: CVs muy cortos (1.7 pág, 3181 chars) y con menos secciones (6.9). % Técnico moderado (8.2%). Uso de negritas promedio (19%). Casi nunca tienen la sección Training Courses (flag=0.9%!). Densidad y uso de color promedios.
+# 2. Cluster 1: CV muy cortos (1.7 pág, 3181 chars) y con menos secciones (6.9). % Técnico moderado (8.2%). Uso de negritas promedio (19%). Casi nunca tienen la sección Training Courses (flag=0.9%!). Densidad y uso de color promedios.
 # Perfil Sugerido: "Cortos y sin sección de Training".
 # 3. Cluster 2: Longitud/páginas promedio (~2.3 pág, ~3900 chars). % Técnico promedio (7%). Uso de negritas ligeramente más alto (21.7%). NUNCA tienen Website/Otro (0%) y NUNCA usan color en texto (0%). Sección Training Courses presente (100%).
 # Perfil Sugerido: "Estándar, sin links personales ni color".
@@ -743,7 +743,7 @@ if df_cluster_orig is not None:
     print("\n--- Análisis Descriptivo de los Clusters ---")
 
     # Tamaño de cada cluster
-    print("\nDistribución de CVs por cluster:")
+    print("\nDistribución de CV por cluster:")
     print(df_clustered['Cluster'].value_counts().sort_index())
 
     # Características promedio por cluster (usando las features seleccionadas antes del escalado)
@@ -821,10 +821,10 @@ if df_cluster_orig is not None:
 
 # Finalmente, entendemos que las 4 variables seleccionadas, así mismo explican la pertenencia a cierto tipo de cluster y la posibilidad de pertenecer a un grupo que pasa (o no) el filtro de nuestros clientes.
 # ### Distribución de Clusters:
-# - Cluster 0: 103 CVs
-# - Cluster 1: 111 CVs
-# - Cluster 2: 400 CVs
-# Observaciones: Tenemos 2 clusters de tamaño similar (0 y 1) y un cluster muy grande (2) que agrupa a casi dos tercios de los CVs.
+# - Cluster 0: 103 CV
+# - Cluster 1: 111 CV
+# - Cluster 2: 400 CV
+# Observaciones: Tenemos 2 clusters de tamaño similar (0 y 1) y un cluster muy grande (2) que agrupa a casi dos tercios de los CV.
 # ### Características Promedio por Cluster: La separación aquí es bastante clara, dominada por las dos variables binarias:
 # - Cluster 0: Siempre tienen Website/Otro (1.0) y siempre tienen Seccion_training_courses (1.0). Longitud y secciones promedio.
 # Perfil: "Con Website y Sección Training".
@@ -836,7 +836,7 @@ if df_cluster_orig is not None:
 # - Cluster 0 (Con Website y Training): 54.4% Passed (La más alta).
 # - Cluster 1 (Sin Training/Website): 32.4% Passed (La más baja).
 # - Cluster 2 (Con Training, Sin Website): 42.5% Passed (Cercana al promedio general).
-# - Prueba Chi-cuadrado (p=0.0052): ¡Muy significativo (p < 0.01)! Confirma que la proporción de CVs que 'Pasaron' es estadísticamente diferente entre estos 3 clusters.
+# - Prueba Chi-cuadrado (p=0.0052): ¡Muy significativo (p < 0.01)! Confirma que la proporción de CV que 'Pasaron' es estadísticamente diferente entre estos 3 clusters.
 # - Interpretación: Este es un hallazgo clave. Los perfiles definidos por estas 4 variables sí están asociados con diferentes tasas de éxito promedio. Tener ambas características (Website/Otro y Seccion_training_courses) se asocia con la mayor tasa de éxito, mientras que carecer de la sección de training (y a menudo también del website) se asocia con la menor. El grupo grande intermedio (solo con Training) tiene una tasa de éxito cercana al promedio.
 # 
 # *Escribir conclusiones*

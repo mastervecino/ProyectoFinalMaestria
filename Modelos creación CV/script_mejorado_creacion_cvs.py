@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Script para creación de CVs
+# # Script para creación de CV
 
 # ## Importaciones y Configuración Inicial
 
 # In[1]:
 
 
-# # Script para extracción de información de las CVs (Versión Refactorizada)
+# # Script para extracción de información de las CV (Versión Refactorizada)
 
 # ##### Obtener librerías necesarias
 import os
@@ -119,7 +119,7 @@ logging.info("Modelo SpaCy 'en_core_web_sm' cargado exitosamente.")
 # In[3]:
 
 
-# #### Definir directorios de CVs a estudiar
+# #### Definir directorios de CV a estudiar
 # NOTA: Es recomendable pasar estas rutas como argumentos usando argparse
 # en un script .py final para mayor flexibilidad.
 # Ejemplo: python tu_script.py --exitosas ../ruta/paso --no-exitosas ../ruta/no_paso
@@ -135,17 +135,17 @@ pdf_files_to_process = []
 if os.path.isdir(hv_dir_exitosas):
     pdf_files_to_process.extend([(os.path.join(hv_dir_exitosas, f), "Exitoso")
                                  for f in os.listdir(hv_dir_exitosas) if f.lower().endswith('.pdf')])
-    logging.info(f"Encontrados {len(pdf_files_to_process)} CVs en '{hv_dir_exitosas}'.")
+    logging.info(f"Encontrados {len(pdf_files_to_process)} CV en '{hv_dir_exitosas}'.")
 else:
-    logging.warning(f"Directorio de CVs exitosos no encontrado: '{hv_dir_exitosas}'")
+    logging.warning(f"Directorio de CV exitosos no encontrado: '{hv_dir_exitosas}'")
 
 initial_count = len(pdf_files_to_process)
 if os.path.isdir(hv_dir_noexitosas):
     pdf_files_to_process.extend([(os.path.join(hv_dir_noexitosas, f), "No Exitoso")
                                   for f in os.listdir(hv_dir_noexitosas) if f.lower().endswith('.pdf')])
-    logging.info(f"Encontrados {len(pdf_files_to_process) - initial_count} CVs en '{hv_dir_noexitosas}'.")
+    logging.info(f"Encontrados {len(pdf_files_to_process) - initial_count} CV en '{hv_dir_noexitosas}'.")
 else:
-    logging.warning(f"Directorio de CVs no exitosos no encontrado: '{hv_dir_noexitosas}'")
+    logging.warning(f"Directorio de CV no exitosos no encontrado: '{hv_dir_noexitosas}'")
 
 logging.info(f"Total de archivos PDF a procesar: {len(pdf_files_to_process)}")
 
@@ -1328,7 +1328,7 @@ def detectar_elementos_graficos_fitz(doc: fitz.Document, umbral_area: int, max_e
         return False # Asumir Falso en caso de error
 
 
-# ### Procesar CVs
+# ### Procesar CV
 
 # In[21]:
 
@@ -1444,7 +1444,7 @@ def process_cv(pdf_path: str, spacy_nlp_model) -> dict:
 # ## Ejecución Principal del Script
 
 if __name__ == "__main__":
-    logging.info("Iniciando el script de análisis de CVs.")
+    logging.info("Iniciando el script de análisis de CV.")
 
     if not pdf_files_to_process:
         logging.warning("No se encontraron archivos PDF para procesar. Finalizando.")
@@ -1462,7 +1462,7 @@ if __name__ == "__main__":
             if "Error" in cv_data.get("status_procesamiento", ""):
                 errores_procesamiento += 1
 
-        logging.info(f"Procesamiento completado. Total CVs: {len(all_results)}, Errores: {errores_procesamiento}")
+        logging.info(f"Procesamiento completado. Total CV: {len(all_results)}, Errores: {errores_procesamiento}")
 
         # Convertir resultados a DataFrame de Pandas
         if all_results:
