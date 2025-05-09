@@ -214,7 +214,8 @@ if __name__ == "__main__":
             print("Cluster 1:  Sin Training (y Mayormente sin Website) - Corto\n"
                   "\n"
                   "Sugerencia: Ayúdale al candidato a brindarle más contenido a su CV, si es posible agregar una sección de entrenamiento,\n cursos o certificaciones en caso de no tenerla.\n"
-                  "Sugiere añadir links a websites externos de proyectos anteriores o inclusive un portafolio si lo tiene")
+                  "Sugiere añadir links a websites externos de proyectos anteriores o inclusive un portafolio si lo tiene\n"
+                  "Si lo vez necesario, recomiéndale al candidato también incrementar el contenido de esta, tal vez agregando más texto en sus experiencias laborales o agregando secciones adicionales")
         elif cluster == 2:
              print("Cluster 2: Con Sección Training, Sin Website (Grupo Estándar)\n"
                    "\n"
