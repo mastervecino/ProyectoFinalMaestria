@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Analyzer — Candidate Profile Assessment</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="2" width="18" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+          <path d="M8 9h10M8 13h10M8 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="6" fill="var(--primary)" stroke="none"/>
+          <path d="M21.5 24l2 2 3.5-3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="logo-text">CV Analyzer</span>
+      </div>
+      <span class="header-badge">ML-Powered</span>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-label">Candidate Profile Assessment</div>
+        <h1>Understand Your CV<br/>in Seconds</h1>
+        <p class="hero-desc">
+          Upload a CV in PDF format and receive an instant profile assessment
+          powered by K-Means clustering trained on 600+ real CVs from an
+          active recruitment platform.
+        </p>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-num">600+</span>
+            <span class="stat-label">CVs analyzed</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num">3</span>
+            <span class="stat-label">Candidate profiles</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num">4</span>
+            <span class="stat-label">Key features</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="upload-section" id="uploadSection">
+      <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload CV PDF">
+        <div class="drop-content">
+          <svg class="drop-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="4" width="26" height="36" rx="3" stroke="currentColor" stroke-width="2.5"/>
+            <path d="M26 4v10h10" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M16 22h16M16 28h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="36" cy="36" r="10" fill="var(--primary)"/>
+            <path d="M36 31v10M31 36l5-5 5 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="drop-title">Drag &amp; drop your CV here</p>
+          <p class="drop-sub">or click to browse from your computer</p>
+          <button class="browse-btn" type="button" id="browseBtn">Choose PDF File</button>
+          <input type="file" id="fileInput" accept=".pdf" hidden aria-label="Select PDF file" />
+        </div>
+        <p class="format-note">PDF format only &nbsp;·&nbsp; Maximum 10 MB</p>
+      </div>
+
+      <div class="privacy-note">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9zM0 6a8 8 0 1116 0A8 8 0 010 6z" fill="currentColor" opacity=".3"/><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6S5.51 10.5 8 10.5 12.5 8.49 12.5 6 10.49 1.5 8 1.5z" fill="none"/><path d="M8 14a6 6 0 100-12A6 6 0 008 14z" stroke="currentColor" stroke-width="1.2"/><path d="M8 7v4M8 5.5V5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Your CV is processed entirely in your browser. Nothing is uploaded to any server.
+      </div>
+    </section>
+
+    <section class="processing-section" id="processingSection" hidden>
+      <div class="processing-card">
+        <div class="spinner"></div>
+        <p class="processing-title">Analyzing your CV&hellip;</p>
+        <p class="processing-sub">Extracting text, detecting sections, and computing profile features</p>
+      </div>
+    </section>
+
+    <section class="results-section" id="resultsSection" hidden>
+    </section>
+
+    <section class="how-section">
+      <div class="how-inner">
+        <div class="section-label">Methodology</div>
+        <h2>How It Works</h2>
+        <p class="how-desc">Built as a Master's thesis in Business Analytics at Universidad del Rosario, this tool applies unsupervised machine learning to identify candidate profile patterns.</p>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">01</div>
+            <h3>Extract Features</h3>
+            <p>Four structural features are extracted from your CV: total text length, number of recognized sections, presence of a personal website, and presence of a training/courses section.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">02</div>
+            <h3>Profile Matching</h3>
+            <p>Features are scaled and compared against 3 candidate profiles discovered through K-Means clustering of 600+ CVs collected from the Manatal recruitment platform.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">03</div>
+            <h3>Receive Feedback</h3>
+            <p>You receive a profile assignment with a success rate indicator and specific, actionable recommendations to improve your CV's effectiveness in recruitment processes.</p>
+          </div>
+        </div>
+
+        <div class="profiles-grid">
+          <div class="profile-card profile-success">
+            <div class="profile-dot"></div>
+            <div>
+              <h4>Strong Profile</h4>
+              <p>Website + Training Section present. Highest success rate in recruitment.</p>
+            </div>
+          </div>
+          <div class="profile-card profile-warning">
+            <div class="profile-dot"></div>
+            <div>
+              <h4>Standard Profile</h4>
+              <p>Training section present, no website link. Medium success rate.</p>
+            </div>
+          </div>
+          <div class="profile-card profile-danger">
+            <div class="profile-dot"></div>
+            <div>
+              <h4>Needs Improvement</h4>
+              <p>Short CV, missing key sections. Lowest success rate — high improvement potential.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>
+        Built with data from <strong>Manatal</strong> &nbsp;·&nbsp;
+        Master&rsquo;s in Business Analytics &nbsp;·&nbsp;
+        Universidad del Rosario &nbsp;·&nbsp;
+        <a href="https://github.com/manuvecino" target="_blank" rel="noopener">GitHub</a>
+      </p>
+      <p class="footer-sub">All CV processing happens client-side. No data is stored or transmitted.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+    integrity="sha512-q+4liFwdPC/bNdhUpZx6aXDx/h77yEQtn4I1slHydcbZK34nLaR3cAeYSJshoxIOq4aXEsLDfHIEPsE0CQXUA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
