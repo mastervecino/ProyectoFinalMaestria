@@ -1,15 +1,11 @@
 'use strict';
 
 // ── PDF.js worker ────────────────────────────────────────────────────────────
-if (typeof pdfjsLib === 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => {
-    const drop = document.getElementById('dropZone');
-    if (drop) drop.innerHTML = '<p style="color:#ef4444;padding:24px">Error: PDF.js failed to load. Please check your internet connection and refresh.</p>';
-  });
-  throw new Error('pdfjsLib not available');
+// Set worker only if pdfjsLib loaded — error surfaces later inside analyzeFile
+if (typeof pdfjsLib !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 // ── Section dictionary (mirrors Herramienta.py) ──────────────────────────────
 const SECTIONS_DICT = {
@@ -330,6 +326,10 @@ async function analyzeFile(file) {
   showSection('processingSection');
 
   try {
+    if (typeof pdfjsLib === 'undefined') {
+      throw new Error('PDF.js failed to load. Please check your connection and refresh the page.');
+    }
+
     // Load model on first run
     if (!model) {
       const res = await fetch('model.json');
@@ -374,18 +374,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const dropZone  = document.getElementById('dropZone');
   const fileInput = document.getElementById('fileInput');
-  const browseBtn = document.getElementById('browseBtn');
 
-  // Browse button
-  browseBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    fileInput.click();
-  });
-
-  // Click on drop zone (but not on the button itself)
-  dropZone.addEventListener('click', () => fileInput.click());
-
-  // Keyboard accessibility
+  // Keyboard accessibility for the drop zone
   dropZone.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
   });
