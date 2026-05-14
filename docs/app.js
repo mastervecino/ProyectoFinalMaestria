@@ -1,6 +1,13 @@
 'use strict';
 
 // ── PDF.js worker ────────────────────────────────────────────────────────────
+if (typeof pdfjsLib === 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const drop = document.getElementById('dropZone');
+    if (drop) drop.innerHTML = '<p style="color:#ef4444;padding:24px">Error: PDF.js failed to load. Please check your internet connection and refresh.</p>';
+  });
+  throw new Error('pdfjsLib not available');
+}
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
