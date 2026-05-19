@@ -10,7 +10,7 @@ Built as a Master's thesis in Business Analytics at **Universidad del Rosario**.
 
 > **No installation required.** Upload your CV directly in the browser — all processing happens client-side.
 
-👉 **[Open CV Analyzer](https://manuvecino.github.io/ProyectoFinalMaestria/)**
+👉 **[Open CV Analyzer](https://mastervecino.github.io/cv_evaluation_system/)**
 
 ---
 
@@ -182,3 +182,4 @@ The web app has **no dependencies** — it runs entirely in the browser using [P
 ## Author
 
 **Manuel Vecino** — Master's in Business Analytics, Universidad del Rosario
+https://www.linkedin.com/in/manuelfvecinom/
