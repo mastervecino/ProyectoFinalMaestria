@@ -116,24 +116,34 @@ def detect_sections(text: str) -> dict[str, bool]:
     return detected
 
 
-def extract_links(doc: fitz.Document) -> dict[str, bool]:
+LINKEDIN_RE = re.compile(r"linkedin\.com/(in|pub)/", re.I)
+GITHUB_RE   = re.compile(r"github\.com/", re.I)
+# Plain-text URLs typed in the CV body (no hyperlink annotation), e.g. "www.myportfolio.com"
+TEXT_URL_RE = re.compile(r"(?:https?://|www\.)[^\s)\]}>,;\"'<>]+", re.I)
+
+
+def extract_links(doc: fitz.Document, text: str = "") -> dict[str, bool]:
     links = {"LinkedIn": False, "GitHub": False, "Website/Otro": False}
-    linkedin_re = re.compile(r"linkedin\.com/(in|pub)/", re.I)
-    github_re   = re.compile(r"github\.com/", re.I)
+    uris: list[str] = []
     try:
         for page in doc:
             for link in page.get_links():
                 uri = link.get("uri", "")
-                if not uri:
-                    continue
-                if linkedin_re.search(uri):
-                    links["LinkedIn"] = True
-                elif github_re.search(uri):
-                    links["GitHub"] = True
-                elif uri.lower().startswith("http"):
-                    links["Website/Otro"] = True
+                if uri:
+                    uris.append(uri)
     except Exception as exc:
         log.warning("Could not extract links: %s", exc)
+
+    # Also pick up URLs written as plain text (common in CVs exported from Word/Canva)
+    uris.extend(TEXT_URL_RE.findall(text))
+
+    for uri in uris:
+        if LINKEDIN_RE.search(uri):
+            links["LinkedIn"] = True
+        elif GITHUB_RE.search(uri):
+            links["GitHub"] = True
+        elif re.match(r"^(https?://|www\.)", uri, re.I):
+            links["Website/Otro"] = True
     return links
 
 # ── Core analysis ─────────────────────────────────────────────────────────────
@@ -179,7 +189,7 @@ def analyze_cv(
             return {}, None
 
         sections = detect_sections(text)
-        links    = extract_links(doc)
+        links    = extract_links(doc, text)
 
         features = {
             "texto_extraido_len":      len(text),

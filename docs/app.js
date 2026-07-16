@@ -141,14 +141,20 @@ async function extractFromPDF(file) {
 
 const LINKEDIN_RE = /linkedin\.com\/(in|pub)\//i;
 const GITHUB_RE   = /github\.com\//i;
+// Plain-text URLs typed in the CV body (no hyperlink annotation), e.g. "www.myportfolio.com"
+const TEXT_URL_RE = /(?:https?:\/\/|www\.)[^\s)\]}>,;"'<>]+/gi;
 
 function computeFeatures(text, urls) {
   const sections = detectSections(text);
   const sectionCount = Object.values(sections).filter(Boolean).length;
 
-  const hasLinkedIn = urls.some(u => LINKEDIN_RE.test(u));
-  const hasGitHub   = urls.some(u => GITHUB_RE.test(u));
-  const hasWebsite  = urls.some(u => u.startsWith('http') && !LINKEDIN_RE.test(u) && !GITHUB_RE.test(u));
+  // Merge hyperlink annotations with URLs written as plain text
+  const textUrls = text.match(TEXT_URL_RE) || [];
+  const allUrls = [...urls, ...textUrls];
+
+  const hasLinkedIn = allUrls.some(u => LINKEDIN_RE.test(u));
+  const hasGitHub   = allUrls.some(u => GITHUB_RE.test(u));
+  const hasWebsite  = allUrls.some(u => /^(https?:\/\/|www\.)/i.test(u) && !LINKEDIN_RE.test(u) && !GITHUB_RE.test(u));
 
   return {
     texto_extraido_len:    text.length,
@@ -200,15 +206,17 @@ function icon(type) {
   return icons[type] ?? '';
 }
 
-function renderResults(cluster, features, confidence, modelClusters) {
-  const info = modelClusters[String(cluster)];
+function renderResults(cluster, features, confidence, model) {
+  const info = model.clusters[String(cluster)];
   const colorClass = info.color; // 'success' | 'warning' | 'danger'
 
   const detectedSections = Object.entries(features._sections)
     .filter(([, v]) => v)
     .map(([k]) => k.replace(/_/g, ' '));
 
-  const textLenGood = features.texto_extraido_len >= 1000;
+  // "Good" length = within half a standard deviation of the training-set mean
+  const textLenThreshold = Math.round(model.scaler.mean[0] - 0.5 * model.scaler.scale[0]);
+  const textLenGood = features.texto_extraido_len >= textLenThreshold;
 
   return `
     <div class="result-card">
@@ -227,6 +235,17 @@ function renderResults(cluster, features, confidence, modelClusters) {
       <div class="result-body">
 
         <p class="result-description">${info.description}</p>
+
+        <div class="confidence-block">
+          <div class="confidence-labels">
+            <span class="confidence-title">Profile match confidence</span>
+            <span class="confidence-value">${confidence}%</span>
+          </div>
+          <div class="confidence-track" role="progressbar" aria-valuenow="${confidence}" aria-valuemin="0" aria-valuemax="100" aria-label="Profile match confidence">
+            <div class="confidence-fill ${colorClass}" style="width:${confidence}%"></div>
+          </div>
+          <p class="confidence-hint">How much closer your CV is to this profile than to the next-nearest one.</p>
+        </div>
 
         <div class="features-grid">
           <div class="feature-card ${textLenGood ? 'feat-good' : 'feat-warn'}">
@@ -311,15 +330,22 @@ function resetUI() {
   document.getElementById('fileInput').value = '';
 }
 
+function showValidationError(message) {
+  const resultsEl = document.getElementById('resultsSection');
+  resultsEl.innerHTML = renderError(message);
+  showSection('resultsSection');
+  document.getElementById('retryBtn')?.addEventListener('click', resetUI);
+}
+
 async function analyzeFile(file) {
   if (!file) return;
 
   if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-    alert('Please upload a PDF file.');
+    showValidationError('Please upload a PDF file.');
     return;
   }
   if (file.size > 10 * 1024 * 1024) {
-    alert('File is too large. Please upload a PDF under 10 MB.');
+    showValidationError('File is too large. Please upload a PDF under 10 MB.');
     return;
   }
 
@@ -347,7 +373,7 @@ async function analyzeFile(file) {
     const { cluster, confidence } = predictCluster(features, model);
 
     const resultsEl = document.getElementById('resultsSection');
-    resultsEl.innerHTML = renderResults(cluster, features, confidence, model.clusters);
+    resultsEl.innerHTML = renderResults(cluster, features, confidence, model);
     showSection('resultsSection');
     resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 

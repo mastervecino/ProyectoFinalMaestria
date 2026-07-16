@@ -1,6 +1,6 @@
 # CV Analyzer — Candidate Profile Assessment
 
-A machine-learning tool that analyzes a résumé (CV) in PDF format and classifies it into one of **3 candidate profiles** discovered through K-Means clustering of 600+ real CVs from the [Manatal](https://www.manatal.com/) recruitment platform.
+A machine-learning tool that analyzes a résumé (CV) in PDF format and classifies it into one of **3 candidate profiles** discovered through K-Means clustering of 600+ real CVs collected from an active recruitment process.
 
 Built as a Master's thesis in Business Analytics at **Universidad del Rosario**.
 

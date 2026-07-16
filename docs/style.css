@@ -345,6 +345,51 @@ header {
   line-height: 1.7;
 }
 
+/* confidence */
+.confidence-block {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+}
+.confidence-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.confidence-title {
+  font-size: .78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-3);
+}
+.confidence-value {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.confidence-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+.confidence-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width .6s ease;
+}
+.confidence-fill.success { background: var(--success); }
+.confidence-fill.warning { background: var(--warning); }
+.confidence-fill.danger  { background: var(--danger); }
+.confidence-hint {
+  margin-top: 8px;
+  font-size: .78rem;
+  color: var(--text-3);
+}
+
 /* feature grid */
 .features-grid {
   display: grid;
@@ -618,6 +663,42 @@ footer a:hover { text-decoration: underline; }
   cursor: pointer;
 }
 .error-retry:hover { opacity: .9; }
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --success-bg:    rgba(16, 185, 129, .12);
+    --success-border:rgba(16, 185, 129, .35);
+    --warning-bg:    rgba(245, 158, 11, .12);
+    --warning-border:rgba(245, 158, 11, .35);
+    --danger-bg:     rgba(239, 68, 68, .12);
+    --danger-border: rgba(239, 68, 68, .35);
+
+    --bg:            #0b1120;
+    --surface:       #111a2e;
+    --border:        #253352;
+    --text:          #e2e8f0;
+    --text-2:        #94a3b8;
+    --text-3:        #64748b;
+
+    --shadow:        0 1px 3px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+    --shadow-lg:     0 4px 6px rgba(0,0,0,.35), 0 12px 40px rgba(0,0,0,.5);
+  }
+
+  .header-badge {
+    background: rgba(59,130,246,.15);
+    border-color: rgba(59,130,246,.4);
+  }
+
+  .drop-zone:hover,
+  .drop-zone:focus,
+  .drop-zone.drag-over {
+    background: rgba(59,130,246,.08);
+  }
+
+  .link-badge.linkedin { color: #7ab8f5; background: rgba(10,102,194,.15); border-color: rgba(59,130,246,.4); }
+  .link-badge.github   { color: #cbd5e1; background: rgba(255,255,255,.06); border-color: var(--border); }
+}
 
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 540px) {
